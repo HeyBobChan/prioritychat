@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Assistant</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #chat-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        #chat-messages {
+            height: 400px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #user-input {
+            width: 70%;
+        }
+        #send-button {
+            width: 20%;
+        }
+        #image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-messages"></div>
+        <textarea id="user-input" placeholder="Type your message or paste an image here..."></textarea>
+        <button id="send-button">Send</button>
+        <div id="drop-zone">Drop image here</div>
+        <img id="image-preview" style="display: none;">
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let currentImage = null;
+
+            function addMessage(sender, message) {
+                $('#chat-messages').append('<p><strong>' + sender + ':</strong> ' + message + '</p>');
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+            }
+
+            function handleImage(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#image-preview').attr('src', e.target.result).show();
+                    currentImage = file;
+                }
+                reader.readAsDataURL(file);
+            }
+
+            $('#user-input').on('paste', function(e) {
+                const items = e.originalEvent.clipboardData.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf("image") !== -1) {
+                        const blob = items[i].getAsFile();
+                        handleImage(blob);
+                        e.preventDefault();
+                        break;
+                    }
+                }
+            });
+
+            $('#drop-zone').on('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+
+            $('#drop-zone').on('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (e.originalEvent.dataTransfer.files.length) {
+                    handleImage(e.originalEvent.dataTransfer.files[0]);
+                }
+            });
+
+            $('#send-button').click(function() {
+                const message = $('#user-input').val();
+                if (message.trim() === '' && !currentImage) return;
+
+                addMessage('You', message);
+                $('#user-input').val('');
+
+                const formData = new FormData();
+                formData.append('message', message);
+                if (currentImage) {
+                    formData.append('image', currentImage);
+                }
+
+                $.ajax({
+                    url: '/chat',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        addMessage('Assistant', response.response);
+                    }
+                });
+
+                currentImage = null;
+                $('#image-preview').attr('src', '').hide();
+            });
+
+            $('#user-input').keypress(function(e) {
+                if (e.which == 13 && !e.shiftKey) {
+                    e.preventDefault();
+                    $('#send-button').click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
