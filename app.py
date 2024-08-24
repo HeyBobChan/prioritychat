@@ -133,6 +133,7 @@ def end_conversation():
     return jsonify({'message': 'Conversation ended and resources cleaned up.'})
 
 if __name__ == '__main__':
-    # Use the environment variable `PORT` or default to 4000
-    port = int(os.environ.get('PORT', 4000))
+    # Use the environment variable `PORT` or default to 10000
+    port = int(os.environ.get('PORT', 10000))
+    # Run the app on 0.0.0.0 to make it accessible externally
     app.run(host='0.0.0.0', port=port)
