@@ -31,10 +31,16 @@ def wait_on_run(run, thread):
         time.sleep(0.5)
     return run
 
+import re
+
 def clean_response(text):
-    cleaned_text = re.sub(r'【.*?†source】', '', text)
+    # Remove patterns like '【...†...】'
+    cleaned_text = re.sub(r'【[^】]*?†[^】]*?】', '', text)
+    # Optionally, remove any other markers if needed
     cleaned_text = re.sub(r'[\[\]]', '', cleaned_text)
+    # Strip leading and trailing whitespace
     return cleaned_text.strip()
+
 
 def get_assistant_response(user_input="", image_data=None):
     if 'thread_id' not in session:

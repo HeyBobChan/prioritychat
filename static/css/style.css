@@ -1,11 +1,19 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Press+Start+2P&display=swap');
+
+/* Color Variables */
 :root {
-    --primary-color: #4a90e2;
-    --secondary-color: #f0f4f8;
-    --text-color: #333;
-    --light-text-color: #666;
-    --border-color: #ddd;
+    --primary-color: #f5f5f5;  /* Light background */
+    --secondary-color: #ffffff;
+    --text-color: #333333;
+    --accent-color: #bfa980;    /* Softer gold */
+    --turtle-green: #a8d5ba;    /* Soft green */
+    --street-fighter-red: #f2a1a1; /* Soft red */
+    --border-color: #ccc;
+    --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
+/* Reset and Base Styles */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -13,66 +21,161 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
+    font-family: 'Cinzel', serif;
+    background-color: var(--primary-color);
     color: var(--text-color);
-    background-color: #f9f9f9;
     direction: rtl;
+    position: relative;
 }
 
+/* Background Image (Sistine Chapel) */
+body::before {
+    content: '';
+    background: url('../images/sistine_chapel.jpg') no-repeat center center fixed;
+    background-size: cover;
+    opacity: 0.1; /* Lowered opacity for subtlety */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+/* Chat Container */
 .chat-container {
     max-width: 800px;
-    margin: 0 auto;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
+    margin: 20px auto;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: calc(100vh - 40px);
+    border: 1px solid var(--border-color);
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 10px var(--shadow-color);
+    border-radius: 10px;
 }
 
+/* Header Styles */
 header {
-    background-color: var(--primary-color);
-    color: #fff;
-    text-align: center;
+    background-color: var(--secondary-color);
     padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
-h1 {
-    font-size: 1.5rem;
+header h1 {
+    font-size: 2rem;
+    color: var(--accent-color);
+    font-family: 'Cinzel', serif;
 }
 
+/* Main Chat Messages */
 main {
     flex-grow: 1;
     overflow-y: auto;
     padding: 1rem;
+    background-image: url('../images/fish-removebg-preview.jpg');  /* Adjusted file extension */
+    background-repeat: repeat;
+    background-size: 150px 150px;
+    opacity: 0.8; /* Slight transparency for subtlety */
 }
 
+/* Message Styles */
 .message {
-    max-width: 80%;
+    max-width: 75%;
     margin-bottom: 1rem;
-    padding: 0.5rem 1rem;
-    border-radius: 18px;
-    line-height: 1.4;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    position: relative;
+    animation: fadeIn 0.5s;
+    font-size: 1rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+    box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 .user-message {
-    background-color: var(--primary-color);
-    color: #fff;
+    background-color: var(--turtle-green);
     align-self: flex-start;
     margin-right: auto;
 }
 
 .bot-message {
-    background-color: var(--secondary-color);
+    background-color: var(--street-fighter-red);
     align-self: flex-end;
     margin-left: auto;
 }
 
+.message::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+}
+
+.user-message::before {
+    border-right-color: var(--turtle-green);
+    left: -20px;
+    top: 10px;
+}
+
+.bot-message::before {
+    border-left-color: var(--street-fighter-red);
+    right: -20px;
+    top: 10px;
+}
+
+/* Message Styles */
+.message {
+    max-width: 75%;
+    margin-bottom: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    position: relative;
+    animation: fadeIn 0.5s;
+    font-size: 1rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+    box-shadow: 0 2px 5px var(--shadow-color);
+
+    /* Ensure text inside messages is RTL */
+    direction: rtl;
+
+    /* Remove any left or right text alignment */
+    text-align: inherit;
+}
+
+/* Adjust alignment for user and bot messages */
+.user-message {
+    background-color: var(--turtle-green);
+    /* Align user messages to the right */
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.bot-message {
+    background-color: var(--street-fighter-red);
+    /* Align bot messages to the left */
+    align-self: flex-start;
+    margin-right: auto;
+}
+
+/* Remove the triangle shapes */
+.message::before {
+    content: none;
+}
+
+.user-message::before,
+.bot-message::before {
+    content: none;
+}
+
+/* Footer Styles */
 footer {
-    border-top: 1px solid var(--border-color);
+    background-color: var(--secondary-color);
     padding: 1rem;
+    border-top: 1px solid var(--border-color);
 }
 
 #chat-form {
@@ -82,49 +185,97 @@ footer {
 
 #drop-zone {
     border: 2px dashed var(--border-color);
-    border-radius: 4px;
-    padding: 1rem;
+    border-radius: 8px;
+    padding: 0.8rem;
     text-align: center;
-    color: var(--light-text-color);
-    margin-bottom: 1rem;
+    color: var(--text-color);
+    margin-bottom: 0.8rem;
+    background-color: rgba(0, 0, 0, 0.02);
+    font-size: 1rem;
+    transition: background-color 0.3s;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 #drop-zone:hover {
-    background-color: var(--secondary-color);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 #user-input {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.6rem;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 8px;
+    background-color: #fff;
+    color: var(--text-color);
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
     resize: vertical;
-    min-height: 60px;
-    margin-bottom: 0.5rem;
+}
+
+#user-input::placeholder {
+    color: #888;
 }
 
 button {
     align-self: flex-end;
-    background-color: var(--primary-color);
+    background-color: var(--accent-color);
     color: #fff;
     border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    font-family: 'Cinzel', serif;
+    transition: background-color 0.3s, transform 0.1s;
 }
 
 button:hover {
-    background-color: #3a7bc8;
+    background-color: #d4c2a5;
 }
 
+button:active {
+    transform: scale(0.98);
+}
+
+/* Scrollbar Styling */
+main::-webkit-scrollbar {
+    width: 8px;
+}
+
+main::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Media Queries */
 @media (max-width: 600px) {
     .chat-container {
-        height: 100vh;
+        height: auto;
+        margin: 0;
         border-radius: 0;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .message {
+        font-size: 0.9rem;
+    }
+
+    #user-input, button {
+        font-size: 0.9rem;
     }
 }
