@@ -13,7 +13,6 @@ app = Flask(__name__)
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-app.secret_key = 'b2e9c2e0f7ad4f91b5b84a2952d90b0c'
 
 
 # Set up your assistant and thread (you'll need to create these in your OpenAI account)
