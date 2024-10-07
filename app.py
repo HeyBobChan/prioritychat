@@ -10,13 +10,17 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 
 
+
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+app.secret_key = 'b2e9c2e0f7ad4f91b5b84a2952d90b0c'
 
+
+# Set up your assistant and thread (you'll need to create these in your OpenAI account)
 assistant_id = "asst_EA5qnm3CjGozwl4PzF9oxpxY"
 
 # File cleanup settings
-FILE_TIMEOUT = timedelta(minutes=2)  
+FILE_TIMEOUT = timedelta(minutes=2)  # Adjust as needed
 
 def wait_on_run(run, thread):
     while run.status in ["queued", "in_progress"]:
